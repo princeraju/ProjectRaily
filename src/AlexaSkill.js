@@ -1,12 +1,12 @@
 /**
-    Copyright 2014-2015 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ Copyright 2014-2015 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 
-    Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance with the License. A copy of the License is located at
+ Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance with the License. A copy of the License is located at
 
-        http://aws.amazon.com/apache2.0/
+ http://aws.amazon.com/apache2.0/
 
-    or in the "license" file accompanying this file. This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
-*/
+ or in the "license" file accompanying this file. This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+ */
 
 'use strict';
 
@@ -139,7 +139,18 @@ Response.prototype = (function () {
                 outputSpeech: createSpeechObject(options.reprompt)
             };
         }
-        if (options.cardTitle && options.cardContent) {
+        if (options.cardTitle && options.cardContent && options.cardImage) {
+            alexaResponse.card = {
+                type: "Standard",
+                title: options.cardTitle,
+                text: options.cardContent,
+                image: {
+                    smallImageUrl: "https://s3.ap-south-1.amazonaws.com/railysamples/small.png",
+                    largeImageUrl: "https://s3.ap-south-1.amazonaws.com/railysamples/large.png"
+                  }
+            };
+        }
+        else if (options.cardTitle && options.cardContent) {
             alexaResponse.card = {
                 type: "Simple",
                 title: options.cardTitle,
@@ -147,8 +158,8 @@ Response.prototype = (function () {
             };
         }
         var returnResult = {
-                version: '1.0',
-                response: alexaResponse
+            version: '1.0',
+            response: alexaResponse
         };
         if (options.session && options.session.attributes) {
             returnResult.sessionAttributes = options.session.attributes;
@@ -157,11 +168,21 @@ Response.prototype = (function () {
     };
 
     return {
-        tell: function (speechOutput) {
+        tellSSML: function (speechOutput) {
+            this._context.succeed(buildSpeechletResponse({
+                session: this._session,
+                output: {
+                    speech:speechOutput,
+                    type:'SSML'
+                    },
+                shouldEndSession: true
+            }));
+        },
+        tell: function (speechOutput,sessionAttributesHere) {
             this._context.succeed(buildSpeechletResponse({
                 session: this._session,
                 output: speechOutput,
-                shouldEndSession: true
+                shouldEndSession: true 
             }));
         },
         tellWithCard: function (speechOutput, cardTitle, cardContent) {
@@ -173,21 +194,95 @@ Response.prototype = (function () {
                 shouldEndSession: true
             }));
         },
-        ask: function (speechOutput, repromptSpeech) {
+        tellWithCardSSML: function (speechOutput, cardTitle, cardContent) {
+            this._context.succeed(buildSpeechletResponse({
+                session: this._session,
+                output: {
+                    speech:speechOutput,
+                    type:'SSML'
+                    },
+                cardTitle: cardTitle,
+                cardContent: cardContent,
+                shouldEndSession: true
+            }));
+        },
+        tellWithCardSSMLImageCard: function (speechOutput, cardTitle, cardContent) {
+            this._context.succeed(buildSpeechletResponse({
+                session: this._session,
+                output: {
+                    speech:speechOutput,
+                    type:'SSML'
+                    },
+                cardTitle: cardTitle,
+                cardContent: cardContent,
+                cardImage: true,
+                shouldEndSession: true
+            }));
+        },
+        ask: function (speechOutput, repromptSpeech,sessionAttributes) {
             this._context.succeed(buildSpeechletResponse({
                 session: this._session,
                 output: speechOutput,
+                reprompt: repromptSpeech,
+                session:{
+                    attributes: sessionAttributes
+                    },
+                shouldEndSession: false
+            }));
+        },
+        askSSML: function (speechOutput, repromptSpeech,sessionAttributes) {
+            this._context.succeed(buildSpeechletResponse({
+                session: this._session,
+                output: {
+                    speech:speechOutput,
+                    type:'SSML'
+                    },
+                session:{
+                    attributes: sessionAttributes
+                    },
                 reprompt: repromptSpeech,
                 shouldEndSession: false
             }));
         },
-        askWithCard: function (speechOutput, repromptSpeech, cardTitle, cardContent) {
+        askWithCard: function (speechOutput, repromptSpeech, cardTitle, cardContent,sessionAttributes) {
             this._context.succeed(buildSpeechletResponse({
                 session: this._session,
                 output: speechOutput,
+                session:{
+                    attributes: sessionAttributes
+                    },
                 reprompt: repromptSpeech,
                 cardTitle: cardTitle,
                 cardContent: cardContent,
+                shouldEndSession: false
+            }));
+        },
+        askWithCardSSML: function (speechOutput, repromptSpeech, cardTitle, cardContent,sessionAttributes) {
+            this._context.succeed(buildSpeechletResponse({
+                session: this._session,
+                output: {
+                    speech:speechOutput,
+                    type:'SSML'
+                    },
+                session:{
+                    attributes: sessionAttributes
+                    },
+                reprompt: repromptSpeech,
+                cardTitle: cardTitle,
+                cardContent: cardContent,
+                shouldEndSession: false
+            }));
+        },
+        askWithCardSSMLImageCard: function (speechOutput, repromptSpeech, cardTitle, cardContent,sessionAttributes) {
+            this._context.succeed(buildSpeechletResponse({
+                session: this._session,
+                output: {
+                    speech:speechOutput,
+                    type:'SSML'
+                    },
+                cardTitle: cardTitle,
+                cardContent: cardContent,
+                cardImage: true,
                 shouldEndSession: false
             }));
         }

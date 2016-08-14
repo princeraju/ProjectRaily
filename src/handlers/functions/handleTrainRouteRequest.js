@@ -4,7 +4,6 @@ var config=require('../../configs');
 var railways=require('../../services/railwayapi/apiParser');
 
 exports.handleTrainRouteRequest=function(intent, session, response,type) {
-    // Get a random space fact from the space facts list
     //intent.slots.Train.value;
 
 
@@ -25,11 +24,11 @@ exports.handleTrainRouteRequest=function(intent, session, response,type) {
     
 	    if(speechOutput['heading']!=null)	
 	   	{
-	   		response.tellWithCard(speechOutput['speech'], speechOutput['heading'] , speechOutput['status']);
+	   		response.tellWithCardSSMLImageCard('<speak>'+speechOutput['speech']+'</speak>', speechOutput['heading'] , speechOutput['status']);
     	}
     	else
     	{
-    		response.tell(speechOutput['speech']);
+    		response.askSSML(speechOutput['speech']);
     	}
 	});
     

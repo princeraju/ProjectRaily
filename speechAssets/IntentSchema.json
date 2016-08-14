@@ -1,29 +1,11 @@
 {
   "intents": [
     {
-      "intent": "handleTrainStatusIntent",
-      "slots": [
-        {
-          "name": "Train",
-          "type": "LIST_OF_TRAINS"
-        }
-      ]
-    },
-    {
       "intent": "handleTrainNumberStatusIntent",
       "slots": [
         {
           "name": "TrainNumber",
           "type": "AMAZON.NUMBER"
-        }
-      ]
-    },
-    {
-      "intent": "handleTrainRouteIntent",
-      "slots": [
-        {
-          "name": "Train",
-          "type": "LIST_OF_TRAINS"
         }
       ]
     },
@@ -36,16 +18,8 @@
         }
       ]
     },
+
     {
-      "intent": "handleSeatAvailabilityIntent",
-      "slots": [
-        {
-          "name": "Train",
-          "type": "LIST_OF_TRAINS"
-        }
-      ]
-    },
-     {
       "intent": "handleSeatAvailabilityNumberIntent",
       "slots": [
         {
@@ -53,7 +27,7 @@
           "type": "AMAZON.NUMBER"
         },
         {
-          "name": "dat",
+          "name": "Dat",
           "type": "AMAZON.DATE"
         },
         {
@@ -63,6 +37,14 @@
         {
           "name": "StationTwo",
           "type": "LIST_OF_STATIONS"
+        },
+        {
+          "name": "ClassTrain",
+          "type": "LIST_OF_CLASSES"
+        },
+        {
+          "name": "Quota",
+          "type": "LIST_OF_QUOTAS"
         }
       ]
     },
@@ -93,7 +75,7 @@
           "type": "LIST_OF_STATIONS"
         },
         {
-          "name": "dat",
+          "name": "Dat",
           "type": "AMAZON.DATE"
         }
       ]
@@ -118,6 +100,41 @@
     },
     {
       "intent": "AMAZON.CancelIntent"
+    },
+    {
+      "intent": "AMAZON.YesIntent"
+    },
+    {
+      "intent": "AMAZON.NoIntent"
+    },
+    {
+      "intent": "handleMultipleCasesIntent",
+      "slots": [
+        {
+          "name": "TrainNumber",
+          "type": "AMAZON.NUMBER"
+        },
+        {
+          "name": "StationOne",
+          "type": "LIST_OF_STATIONS"
+        },
+        {
+          "name": "StationTwo",
+          "type": "LIST_OF_STATIONS"
+        },
+        {
+          "name": "ClassTrain",
+          "type": "LIST_OF_CLASSES"
+        },
+        {
+          "name": "Quota",
+          "type": "LIST_OF_QUOTAS"
+        },
+        {
+          "name": "Dat",
+          "type": "AMAZON.DATE"
+        }
+      ]
     }
   ]
  }
